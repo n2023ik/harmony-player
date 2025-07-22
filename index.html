@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harmony Player</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="music-player">
+            <div class="header">
+                <h1>Harmony Player</h1>
+            </div>
+            
+            <div class="player-content">
+                <div class="album-art-container">
+                    <div class="vinyl">
+                        <div class="vinyl-inner">
+                            <img src="https://placehold.co/300x300" alt="Album Cover" class="album-cover" id="album-cover">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="song-info">
+                    <h2 class="song-title" id="song-title">No song selected</h2>
+                    <p class="artist" id="artist">--</p>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                    <div class="time-info">
+                        <span id="current-time">0:00</span>
+                        <span id="duration">0:00</span>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <button class="control-btn" id="shuffle-btn" title="Shuffle">
+                        <i class="fas fa-random"></i>
+                    </button>
+                    <button class="control-btn" id="prev-btn" title="Previous">
+                        <i class="fas fa-step-backward"></i>
+                    </button>
+                    <button class="control-btn play-btn" id="play-btn" title="Play/Pause">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="control-btn" id="next-btn" title="Next">
+                        <i class="fas fa-step-forward"></i>
+                    </button>
+                    <button class="control-btn" id="repeat-btn" title="Repeat">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                </div>
+                
+                <div class="volume-control">
+                    <i class="fas fa-volume-down" id="volume-icon"></i>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.7">
+                    <i class="fas fa-volume-up"></i>
+                </div>
+            </div>
+            
+            <div class="playlist-container">
+                <h3><i class="fas fa-list"></i> Playlist</h3>
+                <div class="playlist-scroll">
+                    <ul id="playlist">
+                        <li class="empty-playlist">
+                            <i class="fas fa-music"></i>
+                            <p>No songs in playlist</p>
+                            <p>Add songs using the button above</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audio"></audio>
+    
+    <script src="script.js"></script>
+</body>
+</html>
