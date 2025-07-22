@@ -34,6 +34,20 @@ document.addEventListener('DOMContentLoaded', function() {
             artist: 'Imran Khan',
             cover: 'https://placehold.co/300x300?text=Amplifier',
             file: 'https://files.catbox.moe/ulzv52.mp3'
+        },
+        {
+            id: 3,
+            title: 'No Competition',
+            artist: 'Jass Manak',
+            cover: 'https://placehold.co/300x300?text=No+Competition',
+            file: 'https://files.catbox.moe/cf0vjx.mp3'
+        },
+        {
+            id: 4,
+            title: 'Bazzigar',
+            artist: 'Divine',
+            cover: 'https://placehold.co/300x300?text=Bazzigar',
+            file: 'https://files.catbox.moe/3cvl2f.mp3'
         }
     ];
     let currentSongIndex = 0;
