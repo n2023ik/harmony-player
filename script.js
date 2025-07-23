@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const albumCoverEl = document.getElementById('album-cover');
     const musicPlayerEl = document.querySelector('.music-player');
     const fileUpload = document.getElementById('file-upload');
+    const playlistSearch = document.getElementById('playlist-search');
     
     // Player state
     let songs = [
@@ -55,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let isShuffled = false;
     let isRepeat = false;
     let originalOrder = [];
+    let filteredSongs = null; // null means no filter, otherwise array of filtered songs
     
     // Initialize
     function init() {
@@ -252,14 +254,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Render playlist
     function renderPlaylist() {
-        if (songs.length === 0) {
-            // updateEmptyPlaylistState(); // Removed
+        const displaySongs = filteredSongs !== null ? filteredSongs : songs;
+        if (displaySongs.length === 0) {
+            playlistEl.innerHTML = `<li class="empty-playlist"><i class="fas fa-music"></i><p>No songs found</p></li>`;
             return;
         }
-        
         playlistEl.innerHTML = '';
-        
-        songs.forEach((song, index) => {
+        displaySongs.forEach((song, index) => {
             const li = document.createElement('li');
             li.innerHTML = `
                 <span class="song-number">${index + 1}</span>
@@ -269,29 +270,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <span class="song-duration">--:--</span>
             `;
-            
             li.addEventListener('click', () => {
-                currentSongIndex = index;
-                loadSong(songs[currentSongIndex]);
-                playSong();
+                // Find the index in the main songs array
+                const realIndex = songs.findIndex(s => s.id === song.id);
+                if (realIndex !== -1) {
+                    currentSongIndex = realIndex;
+                    loadSong(songs[currentSongIndex]);
+                    playSong();
+                }
             });
-            
             playlistEl.appendChild(li);
         });
-        
         updateActiveSong();
     }
     
     // Update active song in playlist
     function updateActiveSong() {
+        const displaySongs = filteredSongs !== null ? filteredSongs : songs;
         const playlistItems = playlistEl.querySelectorAll('li');
         playlistItems.forEach(item => item.classList.remove('playing'));
-        
-        if (playlistItems[currentSongIndex]) {
-            playlistItems[currentSongIndex].classList.add('playing');
-            
-            // Scroll to the active song
-            playlistItems[currentSongIndex].scrollIntoView({
+        // Find the index of the current song in the displayed (filtered) list
+        const currentSongId = songs[currentSongIndex]?.id;
+        const filteredIndex = displaySongs.findIndex(song => song.id === currentSongId);
+        if (filteredIndex !== -1 && playlistItems[filteredIndex]) {
+            playlistItems[filteredIndex].classList.add('playing');
+            playlistItems[filteredIndex].scrollIntoView({
                 behavior: 'smooth',
                 block: 'center'
             });
@@ -317,7 +320,19 @@ document.addEventListener('DOMContentLoaded', function() {
     
     volumeSlider.addEventListener('input', setVolume);
     
-    // Remove file upload event listener
+    // Playlist search event
+    playlistSearch.addEventListener('input', function() {
+        const query = this.value.trim().toLowerCase();
+        if (query === '') {
+            filteredSongs = null;
+        } else {
+            filteredSongs = songs.filter(song =>
+                (song.title && song.title.toLowerCase().includes(query)) ||
+                (song.artist && song.artist.toLowerCase().includes(query))
+            );
+        }
+        renderPlaylist();
+    });
     
     // Initialize
     init();
