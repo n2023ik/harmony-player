@@ -19,6 +19,12 @@
     box-sizing: border-box;
 }
 
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body::before {
     content: '';
     position: fixed;
@@ -39,16 +45,16 @@ body {
 }
 
 .container {
-    width: 100vw;
-    height: 100vh;
-    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+    height: 100vh;
+    min-height: 100vh;
+    width: 100vw;
     min-width: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 .music-player {
@@ -63,13 +69,13 @@ body {
     box-shadow: var(--shadow);
     transition: box-shadow 0.3s;
     overflow: hidden;
-    min-width: 320px;
-    max-width: 420px;
+    min-width: 180px;
+    max-width: 300px;
     width: 100%;
     margin: 0 auto;
-    padding: 36px 24px 32px 24px;
+    padding: 6px 4px 6px 4px;
     max-height: 90vh;
-    min-height: 520px;
+    min-height: 180px;
     height: auto;
     box-sizing: border-box;
 }
@@ -91,17 +97,20 @@ body {
 }
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
+    display: block;
+    width: 100%;
+    margin-bottom: 8px;
 }
 
 .header h1 {
-    font-size: 2.1rem;
+    display: block;
+    width: 100%;
+    font-size: 1.1rem;
     letter-spacing: 1px;
     color: var(--primary-color);
     text-shadow: 0 2px 8px rgba(108,92,231,0.08);
+    text-align: center;
+    margin: 0 auto;
 }
 
 .upload-btn {
@@ -150,8 +159,12 @@ body {
 }
 
 .vinyl {
-    width: 250px;
-    height: 250px;
+    max-width: 80px;
+    max-height: 80px;
+    width: 12vw;
+    height: 12vw;
+    min-width: 60px;
+    min-height: 60px;
     background: linear-gradient(135deg, #2d3436 0%, #000000 100%);
     border-radius: 50%;
     display: flex;
@@ -176,8 +189,12 @@ body {
 }
 
 .vinyl-inner {
-    width: 150px;
-    height: 150px;
+    max-width: 48px;
+    max-height: 48px;
+    width: 7vw;
+    height: 7vw;
+    min-width: 32px;
+    min-height: 32px;
     border-radius: 50%;
     overflow: hidden;
     position: relative;
@@ -212,9 +229,9 @@ body {
 }
 
 .song-title {
-    font-size: 22px;
+    font-size: 13px;
     font-weight: 600;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -222,7 +239,7 @@ body {
 }
 
 .artist {
-    font-size: 16px;
+    font-size: 10px;
     color: var(--text-light);
 }
 
@@ -276,18 +293,18 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;
-    margin: 25px 0;
+    gap: 6px;
+    margin: 6px 0;
 }
 
 .control-btn {
     background: none;
     border: none;
     color: var(--text-color);
-    font-size: 18px;
+    font-size: 8px;
     cursor: pointer;
-    width: 45px;
-    height: 45px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -308,9 +325,9 @@ body {
 .play-btn {
     background: var(--primary-color);
     color: white;
-    width: 60px;
-    height: 60px;
-    font-size: 22px;
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
     box-shadow: 0 2px 12px 0 rgba(108,92,231,0.18);
     transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
     position: relative;
@@ -395,7 +412,7 @@ body {
 .playlist-scroll {
     flex: 1 1 auto;
     min-height: 0;
-    max-height: 260px;
+    max-height: 120px;
     overflow-y: auto;
     padding-right: 10px;
 }
@@ -569,5 +586,51 @@ body {
   }
   .playlist-scroll {
     max-height: 120px;
+  }
+}
+
+@media (max-width: 600px) {
+  .music-player {
+    min-width: unset;
+    max-width: 99vw;
+    width: 100vw;
+    min-height: 420px;
+    max-height: 98vh;
+    padding: 12px 2vw 14px 2vw;
+  }
+  .header h1 {
+    font-size: 1.3rem;
+  }
+  .vinyl {
+    width: 120px;
+    height: 120px;
+    max-width: 120px;
+    max-height: 120px;
+  }
+  .vinyl-inner {
+    width: 70px;
+    height: 70px;
+    max-width: 70px;
+    max-height: 70px;
+  }
+  .song-title {
+    font-size: 16px;
+  }
+  .artist {
+    font-size: 12px;
+  }
+  .controls {
+    gap: 8px;
+    margin: 12px 0;
+  }
+  .play-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
+  .control-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
   }
 }
