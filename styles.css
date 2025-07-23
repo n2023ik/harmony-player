@@ -16,6 +16,7 @@
 
 * {
     font-family: 'Montserrat', 'Poppins', sans-serif;
+    box-sizing: border-box;
 }
 
 body::before {
@@ -46,9 +47,15 @@ body {
     align-items: center;
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
+    min-width: 0;
 }
 
 .music-player {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
     background: rgba(255,255,255,0.7);
     backdrop-filter: blur(18px) saturate(1.2);
     border-radius: 28px;
@@ -56,11 +63,15 @@ body {
     box-shadow: var(--shadow);
     transition: box-shadow 0.3s;
     overflow: hidden;
-    min-width: 340px;
+    min-width: 320px;
     max-width: 420px;
     width: 100%;
     margin: 0 auto;
     padding: 36px 24px 32px 24px;
+    max-height: 90vh;
+    min-height: 520px;
+    height: auto;
+    box-sizing: border-box;
 }
 .music-player:hover {
     box-shadow: 0 16px 48px 0 rgba(44, 62, 80, 0.22);
@@ -69,8 +80,10 @@ body {
 @media (max-width: 480px) {
   .music-player {
     min-width: unset;
-    max-width: 98vw;
-    padding: 16px 2vw 18px 2vw;
+    max-width: 99vw;
+    min-height: 420px;
+    max-height: 98vh;
+    padding: 12px 2vw 14px 2vw;
   }
   .container {
     padding: 0;
@@ -363,7 +376,11 @@ body {
 }
 
 .playlist-container {
-    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    margin-top: 18px;
 }
 
 .playlist-container h3 {
@@ -376,7 +393,9 @@ body {
 }
 
 .playlist-scroll {
-    max-height: 300px;
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: 260px;
     overflow-y: auto;
     padding-right: 10px;
 }
@@ -487,6 +506,24 @@ body {
     margin-bottom: 5px;
 }
 
+.playlist-search {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1.5px solid #e0e0e0;
+    font-size: 15px;
+    outline: none;
+    margin-bottom: 18px;
+    background: rgba(255,255,255,0.85);
+    transition: border 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px 0 rgba(108,92,231,0.04);
+}
+
+.playlist-search:focus {
+    border: 1.5px solid var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(108,92,231,0.10);
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .music-player {
@@ -522,4 +559,15 @@ body {
 
 .song-change-animation {
     animation: fadeIn 0.5s ease;
+}
+
+@media (max-height: 700px) {
+  .music-player {
+    max-height: 88vh;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .playlist-scroll {
+    max-height: 120px;
+  }
 }
