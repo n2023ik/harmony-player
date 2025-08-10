@@ -10,7 +10,6 @@
 <body>
     <div class="container">
         <div class="music-player">
-            <input type="text" id="playlist-search" class="playlist-search" placeholder="Search songs..." autocomplete="off">
             <div class="header">
                 <h1>Harmony Player</h1>
             </div>
@@ -58,18 +57,19 @@
                 <div class="volume-control">
                     <i class="fas fa-volume-down" id="volume-icon"></i>
                     <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.7">
-                    <i class="fas fa-volume-up"></i>
                 </div>
             </div>
             
             <div class="playlist-container">
-                <h3><i class="fas fa-list"></i> Playlist</h3>
+                <div class="playlist-header">
+                    <h3><i class="fas fa-list"></i> Playlist</h3>
+                    <input type="text" id="playlist-search" class="playlist-search" placeholder="Search..." autocomplete="off">
+                </div>
                 <div class="playlist-scroll">
                     <ul id="playlist">
                         <li class="empty-playlist">
                             <i class="fas fa-music"></i>
                             <p>No songs in playlist</p>
-                            <p>Add songs using the button above</p>
                         </li>
                     </ul>
                 </div>
