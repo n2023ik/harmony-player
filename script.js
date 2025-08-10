@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const artistEl = document.getElementById('artist');
     const albumCoverEl = document.getElementById('album-cover');
     const musicPlayerEl = document.querySelector('.music-player');
-    const fileUpload = document.getElementById('file-upload');
     const playlistSearch = document.getElementById('playlist-search');
     
     // Player state
@@ -26,28 +25,28 @@ document.addEventListener('DOMContentLoaded', function() {
             id: 1,
             title: 'Gabru',
             artist: 'Yo Yo Honey Singh',
-            cover: 'https://placehold.co/300x300?text=Gabru',
+            cover: 'https://placehold.co/300x300/6c5ce7/ffffff?text=Gabru',
             file: 'https://files.catbox.moe/vakfiu.mp3'
         },
         {
             id: 2,
             title: 'Amplifier',
             artist: 'Imran Khan',
-            cover: 'https://placehold.co/300x300?text=Amplifier',
+            cover: 'https://placehold.co/300x300/a29bfe/ffffff?text=Amplifier',
             file: 'https://files.catbox.moe/ulzv52.mp3'
         },
         {
             id: 3,
             title: 'No Competition',
             artist: 'Jass Manak',
-            cover: 'https://placehold.co/300x300?text=No+Competition',
+            cover: 'https://placehold.co/300x300/00b894/ffffff?text=No+Comp',
             file: 'https://files.catbox.moe/cf0vjx.mp3'
         },
         {
             id: 4,
-            title: 'Bazzigar',
+            title: 'Baazigar',
             artist: 'Divine',
-            cover: 'https://placehold.co/300x300?text=Bazzigar',
+            cover: 'https://placehold.co/300x300/fd79a8/ffffff?text=Baazigar',
             file: 'https://files.catbox.moe/3cvl2f.mp3'
         }
     ];
@@ -56,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let isShuffled = false;
     let isRepeat = false;
     let originalOrder = [];
-    let filteredSongs = null; // null means no filter, otherwise array of filtered songs
+    let filteredSongs = null;
     
     // Initialize
     function init() {
@@ -65,32 +64,24 @@ document.addEventListener('DOMContentLoaded', function() {
         audio.volume = volumeSlider.value;
     }
     
-    // Load song
+    // Load song details into DOM
     function loadSong(song) {
+        if (!song) return;
         songTitleEl.textContent = song.title || 'Unknown Title';
         artistEl.textContent = song.artist || 'Unknown Artist';
         albumCoverEl.src = song.cover || 'https://placehold.co/300x300?text=No+Image';
         audio.src = song.file;
         
-        // Add animation class
         songTitleEl.classList.add('song-change-animation');
         artistEl.classList.add('song-change-animation');
-        albumCoverEl.classList.add('song-change-animation');
         
-        // Remove animation class after animation ends
         setTimeout(() => {
             songTitleEl.classList.remove('song-change-animation');
             artistEl.classList.remove('song-change-animation');
-            albumCoverEl.classList.remove('song-change-animation');
         }, 500);
         
-        // Update active song in playlist
         updateActiveSong();
-        
-        // Play if player was playing
-        if (isPlaying) {
-            playSong();
-        }
+        if (isPlaying) playSong();
     }
     
     // Play song
@@ -99,18 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
         playBtn.innerHTML = '<i class="fas fa-pause"></i>';
         playBtn.setAttribute('title', 'Pause');
         musicPlayerEl.classList.add('playing');
-        audio.play()
-            .then(() => {
-                // Update duration display
-                updateDurationDisplay();
-            })
-            .catch(error => {
-                console.error('Playback failed:', error);
-                isPlaying = false;
-                playBtn.innerHTML = '<i class="fas fa-play"></i>';
-                playBtn.setAttribute('title', 'Play');
-                musicPlayerEl.classList.remove('playing');
-            });
+        audio.play().catch(error => console.error('Playback failed:', error));
     }
     
     // Pause song
@@ -129,16 +109,13 @@ document.addEventListener('DOMContentLoaded', function() {
             currentSongIndex = songs.length - 1;
         }
         loadSong(songs[currentSongIndex]);
-        if (isPlaying) {
-            playSong();
-        }
     }
     
     // Next song
     function nextSong() {
         if (isRepeat) {
             audio.currentTime = 0;
-            audio.play();
+            playSong();
             return;
         }
         
@@ -147,131 +124,104 @@ document.addEventListener('DOMContentLoaded', function() {
             currentSongIndex = 0;
         }
         loadSong(songs[currentSongIndex]);
-        if (isPlaying) {
-            playSong();
-        }
     }
     
     // Shuffle playlist
     function shufflePlaylist() {
         isShuffled = !isShuffled;
-        shuffleBtn.style.color = isShuffled ? 'var(--primary-color)' : 'var(--text-color)';
+        shuffleBtn.classList.toggle('active', isShuffled);
         
         if (isShuffled) {
             originalOrder = [...songs];
             const currentSong = songs[currentSongIndex];
-            
-            // Create a new array without the current song
             let shuffledSongs = songs.filter((_, index) => index !== currentSongIndex);
             
-            // Shuffle the array
             for (let i = shuffledSongs.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [shuffledSongs[i], shuffledSongs[j]] = [shuffledSongs[j], shuffledSongs[i]];
             }
             
-            // Put current song back at the beginning
             songs = [currentSong, ...shuffledSongs];
             currentSongIndex = 0;
         } else {
             if (originalOrder.length > 0) {
-                // Find the index of the current song in the original order
                 const currentSongId = songs[currentSongIndex].id;
                 songs = [...originalOrder];
                 currentSongIndex = songs.findIndex(song => song.id === currentSongId);
                 originalOrder = [];
             }
         }
-        
         renderPlaylist();
     }
     
     // Toggle repeat
     function toggleRepeat() {
         isRepeat = !isRepeat;
-        repeatBtn.style.color = isRepeat ? 'var(--primary-color)' : 'var(--text-color)';
+        repeatBtn.classList.toggle('active', isRepeat);
     }
     
     // Update progress bar
     function updateProgress(e) {
-        if (isPlaying) {
-            const { duration, currentTime } = e.srcElement;
-            const progressPercent = (currentTime / duration) * 100;
-            progressBar.style.width = `${progressPercent}%`;
-            
-            // Update current time display
-            updateTimeDisplay(currentTime);
-        }
+        const { duration, currentTime } = e.srcElement;
+        const progressPercent = (currentTime / duration) * 100;
+        progressBar.style.width = `${progressPercent}%`;
+        
+        updateTimeDisplay(currentTimeEl, currentTime);
     }
-    
-    // Update duration display
-    function updateDurationDisplay() {
-        const duration = audio.duration;
-        if (duration) {
-            const durationMinutes = Math.floor(duration / 60);
-            let durationSeconds = Math.floor(duration % 60);
-            if (durationSeconds < 10) {
-                durationSeconds = `0${durationSeconds}`;
-            }
-            durationEl.textContent = `${durationMinutes}:${durationSeconds}`;
-        }
+
+    // Format and update time display
+    function updateTimeDisplay(element, time) {
+        if (isNaN(time)) return;
+        const minutes = Math.floor(time / 60);
+        let seconds = Math.floor(time % 60);
+        seconds = seconds < 10 ? `0${seconds}` : seconds;
+        element.textContent = `${minutes}:${seconds}`;
     }
-    
-    // Update time display
-    function updateTimeDisplay(currentTime) {
-        const currentMinutes = Math.floor(currentTime / 60);
-        let currentSeconds = Math.floor(currentTime % 60);
-        if (currentSeconds < 10) {
-            currentSeconds = `0${currentSeconds}`;
-        }
-        currentTimeEl.textContent = `${currentMinutes}:${currentSeconds}`;
-    }
-    
+
     // Set progress bar when clicked
     function setProgress(e) {
         const width = this.clientWidth;
         const clickX = e.offsetX;
         const duration = audio.duration;
-        audio.currentTime = (clickX / width) * duration;
+        if(duration) {
+            audio.currentTime = (clickX / width) * duration;
+        }
     }
     
     // Set volume
     function setVolume() {
-        const volume = this.value;
-        audio.volume = volume;
+        audio.volume = this.value;
         
-        // Update volume icon
-        if (volume == 0) {
+        if (audio.volume == 0) {
             volumeIcon.className = 'fas fa-volume-mute';
-        } else if (volume < 0.5) {
+        } else if (audio.volume < 0.5) {
             volumeIcon.className = 'fas fa-volume-down';
         } else {
             volumeIcon.className = 'fas fa-volume-up';
         }
     }
     
-    // Remove file upload functionality
-    
     // Render playlist
     function renderPlaylist() {
         const displaySongs = filteredSongs !== null ? filteredSongs : songs;
+        playlistEl.innerHTML = '';
+
         if (displaySongs.length === 0) {
             playlistEl.innerHTML = `<li class="empty-playlist"><i class="fas fa-music"></i><p>No songs found</p></li>`;
             return;
         }
-        playlistEl.innerHTML = '';
+
         displaySongs.forEach((song, index) => {
             const li = document.createElement('li');
+            li.setAttribute('data-id', song.id);
             li.innerHTML = `
                 <span class="song-number">${index + 1}</span>
                 <div class="song-details">
                     <div class="song-title">${song.title}</div>
                     <div class="song-artist">${song.artist}</div>
                 </div>
-                <span class="song-duration">--:--</span>
             `;
             li.addEventListener('click', () => {
-                // Find the index in the main songs array
                 const realIndex = songs.findIndex(s => s.id === song.id);
                 if (realIndex !== -1) {
                     currentSongIndex = realIndex;
@@ -284,56 +234,47 @@ document.addEventListener('DOMContentLoaded', function() {
         updateActiveSong();
     }
     
-    // Update active song in playlist
+    // Update active song styling in playlist
     function updateActiveSong() {
-        const displaySongs = filteredSongs !== null ? filteredSongs : songs;
-        const playlistItems = playlistEl.querySelectorAll('li');
-        playlistItems.forEach(item => item.classList.remove('playing'));
-        // Find the index of the current song in the displayed (filtered) list
         const currentSongId = songs[currentSongIndex]?.id;
-        const filteredIndex = displaySongs.findIndex(song => song.id === currentSongId);
-        if (filteredIndex !== -1 && playlistItems[filteredIndex]) {
-            playlistItems[filteredIndex].classList.add('playing');
-            playlistItems[filteredIndex].scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            });
-        }
+        const playlistItems = playlistEl.querySelectorAll('li');
+        playlistItems.forEach(item => {
+            if (item.dataset.id == currentSongId) {
+                item.classList.add('playing');
+                item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+                item.classList.remove('playing');
+            }
+        });
     }
-    
-    // Event listeners
-    playBtn.addEventListener('click', () => {
-        if (songs.length === 0) return;
-        isPlaying ? pauseSong() : playSong();
-    });
-    
-    prevBtn.addEventListener('click', prevSong);
-    nextBtn.addEventListener('click', nextSong);
-    shuffleBtn.addEventListener('click', shufflePlaylist);
-    repeatBtn.addEventListener('click', toggleRepeat);
-    
-    audio.addEventListener('timeupdate', updateProgress);
-    audio.addEventListener('ended', nextSong);
-    audio.addEventListener('loadedmetadata', updateDurationDisplay);
-    
-    progressContainer.addEventListener('click', setProgress);
-    
-    volumeSlider.addEventListener('input', setVolume);
-    
-    // Playlist search event
-    playlistSearch.addEventListener('input', function() {
+
+    // Search/filter playlist
+    function filterPlaylist() {
         const query = this.value.trim().toLowerCase();
         if (query === '') {
             filteredSongs = null;
         } else {
             filteredSongs = songs.filter(song =>
-                (song.title && song.title.toLowerCase().includes(query)) ||
-                (song.artist && song.artist.toLowerCase().includes(query))
+                song.title.toLowerCase().includes(query) ||
+                song.artist.toLowerCase().includes(query)
             );
         }
         renderPlaylist();
-    });
+    }
     
-    // Initialize
+    // Event Listeners
+    playBtn.addEventListener('click', () => isPlaying ? pauseSong() : playSong());
+    prevBtn.addEventListener('click', prevSong);
+    nextBtn.addEventListener('click', nextSong);
+    shuffleBtn.addEventListener('click', shufflePlaylist);
+    repeatBtn.addEventListener('click', toggleRepeat);
+    audio.addEventListener('timeupdate', updateProgress);
+    audio.addEventListener('ended', nextSong);
+    audio.addEventListener('loadedmetadata', () => updateTimeDisplay(durationEl, audio.duration));
+    progressContainer.addEventListener('click', setProgress);
+    volumeSlider.addEventListener('input', setVolume);
+    playlistSearch.addEventListener('input', filterPlaylist);
+    
+    // Initialize Player
     init();
 });
