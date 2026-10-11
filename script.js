@@ -36,24 +36,24 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             id: 2,
-            title: 'Amplifier',
-            artist: 'Imran Khan',
-            cover: 'https://placehold.co/300x300/a29bfe/ffffff?text=Amplifier',
-            file: 'https://files.catbox.moe/ulzv52.mp3'
+            title: 'Him',
+            artist: 'Karan Aujla',
+            cover: 'https://placehold.co/300x300/a29bfe/ffffff?text=Him',
+            file: 'https://files.catbox.moe/m50y3v.mp3'
         },
         {
             id: 3,
-            title: 'No Competition',
-            artist: 'Jass Manak',
-            cover: 'https://placehold.co/300x300/00b894/ffffff?text=No+Comp',
-            file: 'https://files.catbox.moe/cf0vjx.mp3'
+            title: 'Crazy4u',
+            artist: 'Kunwarr',
+            cover: 'https://placehold.co/300x300/00b894/ffffff?text=Crazy4u',
+            file: 'https://files.catbox.moe/9eoqgi.mp3'
         },
         {
             id: 4,
-            title: 'Baazigar',
-            artist: 'Divine',
-            cover: 'https://placehold.co/300x300/fd79a8/ffffff?text=Baazigar',
-            file: 'https://files.catbox.moe/3cvl2f.mp3'
+            title: 'IDK HOW',
+            artist: 'Karan Aujla',
+            cover: 'https://placehold.co/300x300/fd79a8/ffffff?text=IDK+HOW',
+            file: 'https://files.catbox.moe/8116sp.mp3'
         }
     ];
 
